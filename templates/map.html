@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MSFS2020 Cockpit Companion</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap CSS-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<!-- Range Slider CSS-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.3/rangeslider.css" integrity="sha512-FkNnPJevAkIHB3NqUiMadWNcoMcOCPQUMyF55JeAFZmPcSR6wK6TgZ0qL6bMrRqGNaaVS8CAwBYceORhdTUILQ==" crossorigin="anonymous" />
+
+	<!-- Leaflet CSS and JS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="https://cdn.jsdelivr.net/npm/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.min.js"></script>
+	<script src="/static/vendor/leaflet-providers/leaflet-providers.js"></script>
+	<script src='https://unpkg.com/leaflet.marker.slideto@0.2.0/Leaflet.Marker.SlideTo.js'></script>
+
+	<!-- Fontawesome JS-->
+	<script src="https://kit.fontawesome.com/99043d701d.js" crossorigin="anonymous"></script>
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- JQuery UI -->
+	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/flick/jquery-ui.css">
+
+	<!-- JQuery UI Slider -->
+	<link rel="stylesheet" href="/static/vendor/jquery-ui-slider/jquery-ui-slider-pips.css">
+	<script src="/static/vendor/jquery-ui-slider/jquery-ui-slider-pips.js"></script>
+
+	<!-- Sweetalert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+	<!-- Microtip tooltips -->
+	<link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
+
+	<!-- Set script root-->
+	<script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	</script>
+
+	<style>
+		html, body {
+			height: 100vh;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+		.sim-input-field {
+			width: 125px;
+		}
+		.vertical-slider {
+			height: 150px;
+			margin-left: 15px;
+			margin-top: 20px;
+		}
+
+		.slider .ui-slider-tip {
+			visibility: visible;
+			opacity: 1;
+			top: -30px;
+		}
+	</style>
+</head>
+
+<body>
+
+<div class="container-fluid p-0" style="height: 100%; width: 100%;">  <!--Main container-->
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+			<ul class="navbar-nav mr-auto">
+				<button id=followModeButton class="btn btn-primary btn-sm" type="button" onclick="toggleFollowPlane()">
+					<i class="fas fa-location-arrow"></i> <span id=followMode>Moving map enabled</span>
+				</button>
+			</ul>
+		</div>
+	</nav>
+
+
+	<div class="row p-2" style="height: 85vh">
+		<div class="col-sm-7 col-xl-8 no-gutters collapse show p-0" style="background-color: grey;" id="map_column" style="position: relative; height=100%;">
+			<div id = "map" style = "height: 100%; width: 100%;"></div>
+		</div>
+
+		<div class="col collapse show" id="hud_column">
+
+			<div class="accordion" id="accordionHUD">
+
+				<!-- NAVIGATION -->
+				<div class="card">
+
+					<div id="collapseNavigation" class="collapse show" aria-labelledby="collapseNavigation" data-parent="#accordionHUD">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-6">
+									<div class="card text-white bg-secondary mb-3">
+										<div class="card-body text-center">
+											<h7 class="card-title">Altitude</h7>
+											<h3 class="card-title"><span id=altitude>?</span></h3>
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="card text-white bg-secondary mb-3">
+										<div class="card-body text-center">
+											<h7 class="card-title">V/Speed</h7>
+											<h3 class="card-title"><span id=vertical-speed>?</span></h3>
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="card text-white bg-secondary mb-3">
+										<div class="card-body text-center">
+											<h7 class="card-title">Heading</h7>
+											<h3 class="card-title"><span id=compass>?</span></h3>
+										</div>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="card text-white bg-secondary mb-3">
+										<div class="card-body text-center">
+											<h7 class="card-title">Airspeed</h7>
+											<h3 class="card-title"><span id=airspeed>?</span></h3>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+		
+			</div>
+		</div>
+	</div>
+
+</div>  <!--Main container-->
+
+<!-- Create map object -->
+<script>
+
+    let followPlane = true;
+
+    // Create map options
+    var mapOptions = {
+        center: [41.8601, -87.6101],
+        zoom: 10,
+        dragging: true,
+    }
+
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+
+    // Creating a Layer object
+    var simple = new L.tileLayer.provider('CartoDB.Voyager');
+    var openstreet = new L.tileLayer.provider('OpenStreetMap.Mapnik');
+    var grayscale = new L.tileLayer.provider('CartoDB.Positron');
+    var basic = new L.tileLayer.provider('Jawg.Terrain', {
+        variant: '',
+        accessToken: 'CQVU4GpEMHf6XeTxVy2x2zRCDJpr6zFX61tYzcs27Jeus4kfc9XBUNfz3mhPakJZ'
+    });
+
+    var openaip_cached_basemap = new L.TileLayer("http://{s}.tile.maps.openaip.net/geowebcache/service/tms/1.0.0/openaip_basemap@EPSG%3A900913@png/{z}/{x}/{y}.png", {
+        maxZoom: 14,
+        minZoom: 4,
+        tms: true,
+        detectRetina: true,
+        subdomains: '12',
+        format: 'image/png',
+        transparent: true
+    });
+
+    // Adding layers to the map
+    map.addLayer(basic);
+
+    var baseLayers = {
+        "Grayscale": grayscale,
+        "Open Street": openstreet,
+        "Pale": simple,
+        "Default": basic,
+    }
+    var overlays = {
+        "Aviation": openaip_cached_basemap
+    }
+
+    // Add control
+    L.control.layers(baseLayers, overlays).addTo(map)
+
+    // Icon options
+    var iconOptions = {
+        iconUrl: '/static/img/plane.png',
+        iconSize: [35, 35]
+    }
+
+    // Creating a custom icon
+    var customIcon = L.icon(iconOptions);
+
+    // Creating Marker Options
+    var markerOptions = {
+        clickable: false,
+        draggable: false,
+        icon: customIcon,
+        rotationAngle: 0,
+        rotationOrigin: "center"
+    }
+
+    // Creating a Marker
+    var marker = L.marker([17.438139, 78.395830], markerOptions);
+
+    // Adding marker to the map
+    marker.addTo(map);
+
+</script>
+
+<script>
+    $("#elevator-trim-slider")
+        .slider({
+            min: -30,
+            max: 30,
+            orientation: "vertical"
+        })
+        .slider("pips", {
+            step: "10",
+            first: "pip",
+            last: "pip"
+        });
+
+    $("#flaps-slider")
+        .slider({
+            min: -100,
+            max: 0,
+            orientation: "vertical",
+	        value: 10
+        })
+        .slider("pips", {
+            step: "50",
+            first: "pip",
+            last: "pip"
+        });
+
+    $("#rudder-trim-slider")
+        .slider({
+            min: -50,
+            max: 50,
+            orientation: "horizontal"
+        })
+        .slider("pips", {
+            step: "25",
+            first: "pip",
+            last: "pip"
+        });
+
+</script>
+
+<!--Boostrap JS-->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<!--Bootstrap Toggle JS-->
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<!-- Custom JS imports -->
+<script src="/static/js/custom/getSimData.js"></script>
+
+</body>
+</html>
