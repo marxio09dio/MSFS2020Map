@@ -86,64 +86,39 @@
 	</nav>
 
 
-	<div class="p-2" style="height: 85vh">
+	<div style="display: flex; justify-content: space-evenly; width: 100%; padding-top: 5px;">
+		
 		<div class="no-gutters collapse show p-0" style="background-color: grey; position: absolute; right: 5px; bottom: 5px; height:30%; width: 30%; " id="map_column">
 			<div id = "map" style = "height: 100%; width: 100%;"></div>
 		</div>
-
-		<div class="collapse show" id="hud_column" >
-
-			<div class="" id="accordionHUD" >
-
-				<!-- NAVIGATION -->
-				<div class="">
-
-					<div id="collapseNavigation" class="collapse show" aria-labelledby="collapseNavigation" data-parent="#accordionHUD">
-						<div class="">
-							<div class="row">
-								<div class="col-3">
-									<div class="text-white bg-secondary mb-3">
-										<div class="text-center">
-											<h7 class="">Altitude</h7>
-											<h3 class=""><span id=altitude>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-3">
-									<div class="text-white bg-secondary mb-3">
-										<div class="text-center">
-											<h7 class="">V/Speed</h7>
-											<h3 class=""><span id=vertical-speed>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-3">
-									<div class="text-white bg-secondary mb-3">
-										<div class="text-center">
-											<h7 class="">Heading</h7>
-											<h3 class=""><span id=compass>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-3">
-									<div class="text-white bg-secondary mb-3">
-										<div class="text-center">
-											<h7 class="">Airspeed</h7>
-											<h3 class=""><span id=airspeed>?</span></h3>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
 		
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">Altitude</h7>
+				<h3 class=""><span id=altitude>?</span></h3>
+			</div>
+		</div>
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">V/Speed</h7>
+				<h3 class=""><span id=vertical-speed>?</span></h3>
+			</div>
+		</div>					
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">Heading</h7>
+				<h3 class=""><span id=compass>?</span></h3>
+			</div>
+		</div>
+		<div class="text-white bg-secondary mb-3" style="width: 15%; border-radius: 5px;">
+			<div class="text-center">	
+				<h7 class="">Airspeed</h7>
+				<h3 class=""><span id=airspeed>?</span></h3>
 			</div>
 		</div>
 	</div>
-
-</div>  <!--Main container-->
+</div>  
+<!--Main container-->
 
 <!-- Create map object -->
 <script>
