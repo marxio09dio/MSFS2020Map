@@ -27,10 +27,6 @@
 	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/flick/jquery-ui.css">
 
-	<!-- JQuery UI Slider -->
-	<link rel="stylesheet" href="/static/vendor/jquery-ui-slider/jquery-ui-slider-pips.css">
-	<script src="/static/vendor/jquery-ui-slider/jquery-ui-slider-pips.js"></script>
-
 	<!-- Sweetalert2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -74,80 +70,45 @@
 
 <div class="container-fluid p-0" style="height: 100%; width: 100%;">  <!--Main container-->
 
-	<!-- NAVBAR -->
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-			<ul class="navbar-nav mr-auto">
-				<button id=followModeButton class="btn btn-primary btn-sm" type="button" onclick="toggleFollowPlane()">
-					<i class="fas fa-location-arrow"></i> <span id=followMode>Moving map enabled</span>
-				</button>
-			</ul>
-		</div>
-	</nav>
 
 
-	<div class="row p-2" style="height: 85vh">
-		<div class="col-sm-7 col-xl-8 no-gutters collapse show p-0" style="background-color: grey;" id="map_column" style="position: relative; height=100%;">
+
+	<div style="display: flex; justify-content: space-evenly; width: 100%; padding-top: 5px;">
+		
+		<div class="no-gutters collapse show p-0" style="background-color: grey; position: absolute; right: 5px; bottom: 5px; height:30%; width: 30%; " id="map_column">
 			<div id = "map" style = "height: 100%; width: 100%;"></div>
 		</div>
-
-		<div class="col collapse show" id="hud_column">
-
-			<div class="accordion" id="accordionHUD">
-
-				<!-- NAVIGATION -->
-				<div class="card">
-
-					<div id="collapseNavigation" class="collapse show" aria-labelledby="collapseNavigation" data-parent="#accordionHUD">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-6">
-									<div class="card text-white bg-secondary mb-3">
-										<div class="card-body text-center">
-											<h7 class="card-title">Altitude</h7>
-											<h3 class="card-title"><span id=altitude>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="card text-white bg-secondary mb-3">
-										<div class="card-body text-center">
-											<h7 class="card-title">V/Speed</h7>
-											<h3 class="card-title"><span id=vertical-speed>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="card text-white bg-secondary mb-3">
-										<div class="card-body text-center">
-											<h7 class="card-title">Heading</h7>
-											<h3 class="card-title"><span id=compass>?</span></h3>
-										</div>
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="card text-white bg-secondary mb-3">
-										<div class="card-body text-center">
-											<h7 class="card-title">Airspeed</h7>
-											<h3 class="card-title"><span id=airspeed>?</span></h3>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
 		
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">Altitude</h7>
+				<h3 class=""><span id=altitude>?</span></h3>
+			</div>
+		</div>
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">V/Speed</h7>
+				<h3 class=""><span id=vertical-speed>?</span></h3>
+			</div>
+		</div>					
+		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
+				<h7 class="">Heading</h7>
+				<h3 class=""><span id=compass>?</span></h3>
+			</div>
+		</div>
+		<div class="text-white bg-secondary mb-3" style="width: 15%; border-radius: 5px;">
+			<div class="text-center">	
+				<h7 class="">Airspeed</h7>
+				<h3 class=""><span id=airspeed>?</span></h3>
 			</div>
 		</div>
 	</div>
-
-</div>  <!--Main container-->
+</div>  
+<!--Main container-->
 
 <!-- Create map object -->
 <script>
-
     let followPlane = true;
 
     // Create map options
@@ -219,47 +180,25 @@
     // Adding marker to the map
     marker.addTo(map);
 
-</script>
+    var markerCoordinates = [];
 
-<script>
-    $("#elevator-trim-slider")
-        .slider({
-            min: -30,
-            max: 30,
-            orientation: "vertical"
-        })
-        .slider("pips", {
-            step: "10",
-            first: "pip",
-            last: "pip"
-        });
+    var markerPolyline = L.polyline(markerCoordinates, {
+        color: 'red',
+        weight: 2,
+        opacity: 0.7,
+        smoothFactor: 10
+    }).addTo(map);
 
-    $("#flaps-slider")
-        .slider({
-            min: -100,
-            max: 0,
-            orientation: "vertical",
-	        value: 10
-        })
-        .slider("pips", {
-            step: "50",
-            first: "pip",
-            last: "pip"
-        });
+    marker.on('move', function(event) {
+        markerCoordinates.push(event.latlng);
+        markerPolyline.setLatLngs(markerCoordinates);
+    });
 
-    $("#rudder-trim-slider")
-        .slider({
-            min: -50,
-            max: 50,
-            orientation: "horizontal"
-        })
-        .slider("pips", {
-            step: "25",
-            first: "pip",
-            last: "pip"
-        });
+    // Adding Polyline to the map
+    map.setView(marker.getLatLng(), 10);
 
 </script>
+
 
 <!--Boostrap JS-->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
