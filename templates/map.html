@@ -7,8 +7,9 @@
 
 	<!-- Bootstrap CSS-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-	<!-- Range Slider CSS-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.3/rangeslider.css" integrity="sha512-FkNnPJevAkIHB3NqUiMadWNcoMcOCPQUMyF55JeAFZmPcSR6wK6TgZ0qL6bMrRqGNaaVS8CAwBYceORhdTUILQ==" crossorigin="anonymous" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.1.1/umd/turf.min.js"></script>
+
 
 	<!-- Leaflet CSS and JS -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
@@ -48,37 +49,41 @@
 			<div id = "map" style = "height: 100%; width: 100%;"></div>
 		</div>
 		
-		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+		<div class="mb-3"  style="width: 15%; color: black;">
 			<div class="text-center">
 				<h7 class="">Altitude</h7>
 				<h3 class=""><span id=altitude>?</span></h3>
 			</div>
 		</div>
-		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+		<div class="mb-3"  style="width: 15%; color: black;">
 			<div class="text-center">
 				<h7 class="">V/Speed</h7>
 				<h3 class=""><span id=vertical-speed>?</span></h3>
 			</div>
 		</div>					
-		<div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+		<div class="mb-3"  style="width: 15%; color: black;">
 			<div class="text-center">
 				<h7 class="">Heading</h7>
 				<h3 class=""><span id=compass>?</span></h3>
 			</div>
 		</div>
-		<div class="text-white bg-secondary mb-3" style="width: 15%; border-radius: 5px;">
+		<div class="mb-3" style="width: 15%; color: black;">
 			<div class="text-center">	
-				<h7 class="">Airspeed</h7>
+				<h7 class="">GroundSpeed</h7>
 				<h3 class=""><span id=airspeed>?</span></h3>
 			</div>
 		</div>
 	</div>
 	<button id="reset-btn" class="btn btn-primary">Reset</button>
 
-</div>  
+</div>
+
+
+
 <!--Main container-->
 
 <!-- Create map object -->
+
 <script>
     let followPlane = true;
 
@@ -141,7 +146,7 @@
         clickable: false,
         draggable: false,
         icon: customIcon,
-        rotationAngle: 0,
+        rotationAngle: 90,
         rotationOrigin: "center"
     };
 
@@ -151,21 +156,19 @@
     // Adding marker to the map
     marker.addTo(map);
 
-    var markerCoordinates = [];
-
-    var markerPolyline = L.polyline(markerCoordinates, {
-        color: 'red',
-        weight: 2,
-        opacity: 0.7,
-        smoothFactor: 10
+    // Adding Polyline to the map
+    var polyline = L.polyline([], {
+        color: 'blue',
+        weight: 4,
+        opacity: 1,
+        smooth: 10
     }).addTo(map);
 
     marker.on('move', function(event) {
-        markerCoordinates.push(event.latlng);
-        markerPolyline.setLatLngs(markerCoordinates);
+        polyline.addLatLng(event.latlng);
     });
 
-    // Adding Polyline to the map
+    // Set map view to the marker location
     map.setView(marker.getLatLng(), 10);
 
     // Define event listener for reset button
@@ -173,11 +176,12 @@
     if (resetBtn) {
         resetBtn.addEventListener("click", function() {
             // Reset the polyline tracking the marker
-            markerCoordinates = [];
-            markerPolyline.setLatLngs(markerCoordinates);
+            polyline.setLatLngs([]);
         });
     }
 </script>
+
+
 
 
 <!--Boostrap JS-->

@@ -25,28 +25,6 @@ aq = AircraftRequests(sm, _time=10)
 #	'AIRSPEED_INDICATED',
 #	'MAGNETIC_COMPASS',  # Compass reading
 #	'VERTICAL_SPEED',  # Vertical speed indication
-#	'FLAPS_HANDLE_PERCENT',  # Percent flap handle extended
-#	'FUEL_TOTAL_QUANTITY',  # Current quantity in volume
-#	'FUEL_TOTAL_CAPACITY',  # Total capacity of the aircraft
-#	'GEAR_HANDLE_POSITION',  # True if gear handle is applied
-#	'AUTOPILOT_MASTER',
-#	'AUTOPILOT_NAV_SELECTED',
-#	'AUTOPILOT_WING_LEVELER',
-#	'AUTOPILOT_HEADING_LOCK',
-#	'AUTOPILOT_HEADING_LOCK_DIR',
-#	'AUTOPILOT_ALTITUDE_LOCK',
-#	'AUTOPILOT_ALTITUDE_LOCK_VAR',
-#	'AUTOPILOT_ATTITUDE_HOLD',
-#	'AUTOPILOT_GLIDESLOPE_HOLD',
-#	'AUTOPILOT_PITCH_HOLD_REF',
-#	'AUTOPILOT_APPROACH_HOLD',
-#	'AUTOPILOT_BACKCOURSE_HOLD',
-#	'AUTOPILOT_VERTICAL_HOLD',
-#	'AUTOPILOT_VERTICAL_HOLD_VAR',
-#	'AUTOPILOT_PITCH_HOLD',
-#	'AUTOPILOT_FLIGHT_DIRECTOR_ACTIVE',
-#	'AUTOPILOT_AIRSPEED_HOLD',
-#	'AUTOPILOT_AIRSPEED_HOLD_VAR'
 #]
 
 request_location = [
@@ -96,11 +74,6 @@ def glass():
 	return render_template("map.html")
 
 
-@app.route('/attitude-indicator')
-def AttInd():
-	return render_template("attitude-indicator/index.html")
-
-
 def get_dataset(data_type):
 	if data_type == "navigation": request_to_action = request_location
 	if data_type == "airspeed": request_to_action = request_airspeed
@@ -119,7 +92,7 @@ def output_ui_variables():
 	ui_friendly_dictionary = {}
 	ui_friendly_dictionary["STATUS"] = "success"
 
-	# Fuel
+	# Speed
 	ui_friendly_dictionary["AIRSPEED_INDICATE"] = round(aq.get("AIRSPEED_INDICATED"))
 	ui_friendly_dictionary["ALTITUDE"] = thousandify(round(aq.get("PLANE_ALTITUDE")))
 
@@ -235,7 +208,5 @@ def trigger_event_endpoint(event_name):
 	status = trigger_event(event_name, value_to_use)
 
 	return jsonify(status)
-
-
 
 app.run(host='0.0.0.0', port=5000, debug=True)
