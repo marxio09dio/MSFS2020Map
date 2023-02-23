@@ -21,12 +21,14 @@ request_location = [
 	'KOHLSMAN',
 ]
 
-request_airspeed = [
+# need to check whats the ground speed variable in SDK
+request_speed = [
 	'AIRSPEED_TRUE',
 	'AIRSPEED_INDICATE',
 	'AIRSPEED_TRUE CALIBRATE',
 	'AIRSPEED_BARBER POLE',
 	'AIRSPEED_MACH',
+	'Ground_Speed' ,
 ]
 
 request_compass = [
@@ -46,12 +48,6 @@ request_vertical_speed = [
 ]
 
 
-request_cabin = [
-	'CABIN_SEATBELTS_ALERT_SWITCH',
-	'CABIN_NO_SMOKING_ALERT_SWITCH'
-]
-
-
 def thousandify(x):
 	return f"{x:,}"
 
@@ -63,11 +59,9 @@ def glass():
 
 def get_dataset(data_type):
 	if data_type == "navigation": request_to_action = request_location
-	if data_type == "airspeed": request_to_action = request_airspeed
+	if data_type == "airspeed": request_to_action = request_speed
 	if data_type == "compass": request_to_action = request_compass
 	if data_type == "vertical_speed": request_to_action = request_vertical_speed
-	if data_type == 'cabin': request_to_action = request_cabin
-	#if data_type == "ui": request_to_action = request_ui   # see comment above as to why I've removed this
 
 	return request_to_action
 
@@ -75,7 +69,7 @@ def get_dataset(data_type):
 @app.route('/ui')
 def output_ui_variables():
 
-	# Initialise dictionaru
+	# Initialise dictionary
 	ui_friendly_dictionary = {}
 	ui_friendly_dictionary["STATUS"] = "success"
 
