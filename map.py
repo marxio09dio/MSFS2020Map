@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 # Create simconnection
 sm = SimConnect()
-ae = AircraftEvents(sm)
 aq = AircraftRequests(sm, _time=10)
 
 # Create request holders
@@ -18,26 +17,19 @@ request_location = [
 	'ALTITUDE',
 	'LATITUDE',
 	'LONGITUDE',
-	'KOHLSMAN',
+	'HSI_DISTANCE',
 ]
 
 # need to check whats the ground speed variable in SDK
 request_speed = [
 	'AIRSPEED_TRUE',
 	'AIRSPEED_INDICATE',
-	'AIRSPEED_TRUE CALIBRATE',
-	'AIRSPEED_BARBER POLE',
-	'AIRSPEED_MACH',
-	'Ground_Speed' ,
+	'GROUND_VELOCITY'
+
 ]
 
 request_compass = [
-	'WISKEY_COMPASS_INDICATION_DEGREES',
-	'PARTIAL_PANEL_COMPASS',
-	'ADF_CARD',  # ADF compass rose setting
 	'MAGNETIC_COMPASS',  # Compass reading
-	'INDUCTOR_COMPASS_PERCENT_DEVIATION',  # Inductor compass deviation reading
-	'INDUCTOR_COMPASS_HEADING_REF',  # Inductor compass heading
 ]
 
 request_vertical_speed = [
@@ -74,15 +66,15 @@ def output_ui_variables():
 	ui_friendly_dictionary["STATUS"] = "success"
 
 	# Speed
-	ui_friendly_dictionary["AIRSPEED_INDICATE"] = round(aq.get("AIRSPEED_INDICATED"))
 	ui_friendly_dictionary["ALTITUDE"] = thousandify(round(aq.get("PLANE_ALTITUDE")))
-
+	ui_friendly_dictionary["GROUND_VELOCITY"] = round(aq.get("GROUND_VELOCITY"))
 
 	# Navigation
 	ui_friendly_dictionary["LATITUDE"] = aq.get("PLANE_LATITUDE")
 	ui_friendly_dictionary["LONGITUDE"] = aq.get("PLANE_LONGITUDE")
 	ui_friendly_dictionary["MAGNETIC_COMPASS"] = round(aq.get("MAGNETIC_COMPASS"))
 	ui_friendly_dictionary["VERTICAL_SPEED"] = round(aq.get("VERTICAL_SPEED"))
+	ui_friendly_dictionary["HSI_DISTANCE"] = round(aq.get("HSI_DISTANCE"))
 
 
 	return jsonify(ui_friendly_dictionary)
