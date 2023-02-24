@@ -41,7 +41,6 @@ function displayData() {
     $("#vertical-speed").text(vertical_speed);
     $("#groundspeed").text(groundspeed);
     $("#distance").text(distance);
-
 }
 
 
@@ -52,6 +51,8 @@ function updateMap() {
         duration: 1500,
     });
     marker.setRotationAngle(compass);
+
+    updateZoomLevel(groundspeed);
 
     if (followPlane === true) {
         map.panTo(pos);

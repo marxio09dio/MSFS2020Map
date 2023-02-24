@@ -18,21 +18,12 @@
 	<script src="/static/vendor/leaflet-providers/leaflet-providers.js"></script>
 	<script src='https://unpkg.com/leaflet.marker.slideto@0.2.0/Leaflet.Marker.SlideTo.js'></script>
 
-	<!-- Fontawesome JS-->
-	<script src="https://kit.fontawesome.com/99043d701d.js" crossorigin="anonymous"></script>
-
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<!-- JQuery UI -->
 	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/flick/jquery-ui.css">
-
-	<!-- Sweetalert2 -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
-	<!-- Microtip tooltips -->
-	<link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
 
 	<!-- Set script root-->
 	<script type=text/javascript>
@@ -165,7 +156,7 @@
         color: 'blue',
         weight: 4,
         opacity: 1,
-        smooth: 10
+        smooth: 4,
     }).addTo(map);
 
     marker.on('move', function(event) {
@@ -183,19 +174,21 @@
             polyline.setLatLngs([]);
         });
     }
+
+    // Define a function to update the map zoom level based on the ground speed
+    function updateZoomLevel(groundSpeed) {
+        // Define a scaling factor for zooming
+        const ZOOM_SCALE_FACTOR = 0.1;
+        // Calculate the new zoom level based on the ground speed and the scaling factor
+        var newZoomLevel = 14 - Math.floor(groundspeed / 5 * ZOOM_SCALE_FACTOR);
+        // Set the new zoom level
+        map.setZoom(newZoomLevel);
+    }
 </script>
 <!-- Create map object -->
 
-
-<!--Boostrap JS-->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
-<!--Bootstrap Toggle JS-->
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
 <!-- Custom JS imports -->
 <script src="/static/js/custom/getSimData.js"></script>
-
 </body>
+
 </html>
