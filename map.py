@@ -25,7 +25,6 @@ request_speed = [
 	'AIRSPEED_TRUE',
 	'AIRSPEED_INDICATE',
 	'GROUND_VELOCITY'
-
 ]
 
 request_compass = [
@@ -78,7 +77,5 @@ def output_ui_variables():
 
 
 	return jsonify(ui_friendly_dictionary)
-
-
 
 app.run(host='0.0.0.0', port=5000, debug=True)
