@@ -34,44 +34,38 @@
 <body>
 <!--Main container-->
 <div class="container-fluid p-0" style="height: 100%; width: 100%;">  
-	<div style="display: flex; justify-content: space-evenly; width: 100%; padding-top: 5px;">
+	<div style="display: flex; justify-content: space-evenly; width: 100%; padding-top: 5px; opacity: 0.5;">
 		
 		<div class="no-gutters collapse show p-0" style="background-color: grey; position: absolute; right: 5px; bottom: 5px; height:30%; width: 30%; " id="map_column">
 			<div id = "map" style = "height: 100%; width: 100%;"></div>
 		</div>
-		
-		<div class="mb-3"  style="width: 15%; color: black;">
+		<!--this will need boxes or the text cannot be read in the overlay-->
+        <div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
 			<div class="text-center">
 				<h7 class="">Altitude</h7>
 				<h3 class=""><span id=altitude>?</span></h3>
 			</div>
 		</div>
-		<div class="mb-3"  style="width: 15%; color: black;">
-			<div class="text-center">
-				<h7 class="">V/Speed</h7>
-				<h3 class=""><span id=vertical-speed>?</span></h3>
-			</div>
-		</div>					
-		<div class="mb-3"  style="width: 15%; color: black;">
+        <div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
 			<div class="text-center">
 				<h7 class="">Heading</h7>
 				<h3 class=""><span id=compass>?</span></h3>
 			</div>
 		</div>
-		<div class="mb-3" style="width: 15%; color: black;">
-			<div class="text-center">	
+        <div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
 				<h7 class="">Ground Speed</h7>
 				<h3 class=""><span id=groundspeed>?</span></h3>
 			</div>
 		</div>
-        <div class="mb-3" style="width: 15%; color: black;">
-			<div class="text-center">	
+        <div class="text-white bg-secondary mb-3"  style="width: 15%; border-radius: 5px;">
+			<div class="text-center">
 				<h7 class="">Distance Remaining</h7>
-				<h3 class=""><span id=distance>?</span> miles</h3>
+				<h3 class=""><span id=distance>?</span></h3>
 			</div>
 		</div>
-	</div>
-	<button id="reset-btn" class="btn btn-primary">Reset</button>
+    <button id="reset-btn" class="btn btn-primary" style="background-color: transparent; border: none;">.</button>
+
 
 </div>
 <!--Main container-->
